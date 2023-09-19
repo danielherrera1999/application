@@ -19,5 +19,8 @@ class TaskRepositoryImpl implements TaskRepository{
 
   @override
   Future<Result<ApiResponse<bool>, Failure>> edit(TaskRequestEntity params) async => remoteDataSource.edit(params);
+
+  @override
+  Future<Result<ApiResponse<bool>, Failure>> delete(int params) async => remoteDataSource.delete(params);
   
 }

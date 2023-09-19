@@ -22,6 +22,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  String? _selectedStatus;
   TaskRequestEntity taskForm = TaskRequestEntity(
     title: '',
     description: '',
@@ -53,8 +54,24 @@ class _MainScreenState extends State<MainScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
+            DropdownButtonFormField<String>(
+              value: _selectedStatus,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedStatus = newValue;
+                });
+              },
+              items: <String>['Todos', 'PENDIENTE', 'COMPLETADO', 'EN PROGRESO', 'CANCELADO']
+                  .map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: getProportionateScreenHeight(10)),
             Expanded(
-              child: ListTask(udi: widget.uid) 
+              child: ListTask(udi: widget.uid, selectedStatus: _selectedStatus ?? '') 
             )
           ],
         ),

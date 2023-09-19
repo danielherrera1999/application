@@ -257,4 +257,42 @@ class RemoteDatasourceImpl implements RemoteDataSource{
     }    
   }
 
+  @override
+  Future<Result<ApiResponse<bool>, Failure>> delete(int param) async {
+    try {
+      final token = await AuthUtils.getAccessToken();
+      final headers = <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': '$token',
+      };
+
+      final body = {
+        "id": param,
+      };
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/services/task/delete'),
+        headers: headers,
+        body: jsonEncode(body),
+      );
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        final apiResponse = ApiResponse<bool>(
+          data: responseData['data'],
+          message: responseData['msg'],
+          code: responseData['code'],
+          success: responseData['success'],
+        );
+        return Result.ok(apiResponse);        
+      } else {
+        final responseData = jsonDecode(response.body);
+        final message = responseData['msg'];
+        final code = response.statusCode;
+        return Result.error(Failure(message,code));
+      }
+    } catch (e) {
+      return Result.error(Failure('Error en la solicitud: $e', 500));
+    }  
+  }
+
 }

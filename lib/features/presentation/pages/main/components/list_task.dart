@@ -11,7 +11,8 @@ import '../../../../../injection_container.dart' as di;
 
 class ListTask extends StatefulWidget {
   final String udi;
-  const ListTask({ Key? key,  required this.udi}) : super(key: key);
+  final String selectedStatus;
+  const ListTask({ Key? key,  required this.udi, required this.selectedStatus}) : super(key: key);
 
   @override
   State<ListTask> createState() => _ListTaskState();
@@ -34,12 +35,14 @@ class _ListTaskState extends State<ListTask> {
             toast("Some Failure occured while creating the post");
           }
           if (taskState is TaskListLoaded) {
+            final filteredTasks = widget.selectedStatus == null || widget.selectedStatus == 'Todos' ? taskState.taskList 
+            : taskState.taskList.where((task) => task.status == widget.selectedStatus).toList();
             return taskState.taskList.isEmpty
                 ? _notaskYetWidget()
                 : ListView.builder(
-                    itemCount: taskState.taskList.length,
+                    itemCount: filteredTasks.length,
                     itemBuilder: (context, index) {
-                      final task = taskState.taskList[index];
+                      final task = filteredTasks[index];
                       return BlocProvider(
                         create: (context) => di.sl<TaskListCubit>(),
                         child: cardsTask(task: task),
