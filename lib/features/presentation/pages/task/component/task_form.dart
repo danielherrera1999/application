@@ -3,7 +3,9 @@
 import 'package:application/consts.dart';
 import 'package:application/features/domain/entities/task/request/task.request.entity.dart';
 import 'package:application/features/domain/entities/task/request/task.request.entity.dart';
+import 'package:application/features/domain/entities/task/task.entity.dart';
 import 'package:application/features/presentation/cubit/task/create/create_cubit.dart';
+import 'package:application/features/presentation/cubit/task/edit/edit_cubit.dart';
 import 'package:application/features/presentation/cubit/user/credentials/credentials_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +18,8 @@ import '../../../widgets/form_error.dart';
 import '../../../widgets/input_credential.dart';
 
 class TaskForm extends StatefulWidget {
-  const TaskForm({ Key? key }) : super(key: key);
+  final TaskEntity? task;
+  const TaskForm({ Key? key, this.task }) : super(key: key);
 
   @override
   State<TaskForm> createState() => _TaskFormFormState();
@@ -46,7 +49,10 @@ class _TaskFormFormState extends State<TaskForm> {
   @override
   void initState() {
     super.initState();
-    _selectedDate = DateTime.now(); // Inicializa la fecha seleccionada con la fecha actual
+    _selectedDate = DateTime.now();
+    _titleController.text = widget.task?.title.toString() ?? '';
+    _descriptionController.text = widget.task?.description.toString() ?? '';
+    _selectedStatus = widget.task?.status.toString() ?? 'PENDIENTE';
   }
 
   void addError({String? error}) {
@@ -165,7 +171,11 @@ class _TaskFormFormState extends State<TaskForm> {
             text: "GUARDAR",
             state: true,
             press: () {
-              _save();
+              if (widget.task!.id != '') {
+                _edit();
+              }else{
+                _save();
+              }
             },
           ),
           SizedBox(height: SizeConfig.screenHeight * 0.05),
@@ -183,9 +193,30 @@ class _TaskFormFormState extends State<TaskForm> {
           status: _selectedStatus,
       );
     });
-    BlocProvider.of<TaskCreateCubit>(context).add(
-        params: task
-    ).then((value) => _clear());
+    if (widget.task?.id != null) {
+      BlocProvider.of<TaskCreateCubit>(context).add(
+          params: task
+      ).then((value) => _clear());
+    }else{
+      BlocProvider.of<TaskEditCubit>(context).edit(
+          params: task
+      ).then((value) => _clear());
+    }
+  }
+
+    Future<void> _edit() async {
+    setState(() {
+      task = TaskRequestEntity(
+        id: widget.task!.id,
+        title: _titleController.text,
+          description: _descriptionController.text,
+          expiration: _selectedDate.toString(),
+          status: _selectedStatus,
+      );
+    });
+      BlocProvider.of<TaskEditCubit>(context).edit(
+          params: task
+      ).then((value) => _clear());
   }
 
   _clear() {

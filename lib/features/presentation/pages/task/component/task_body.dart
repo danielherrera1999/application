@@ -1,13 +1,17 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, unused_local_variable
 
 import 'package:application/consts.dart';
+import 'package:application/features/domain/entities/task/task.entity.dart';
 import 'package:application/features/presentation/pages/task/component/task_form.dart';
 import 'package:application/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TaskBody extends StatefulWidget {
-  const TaskBody({ Key? key }) : super(key: key);
+  final TaskEntity? task;
+  final String title;
+
+  const TaskBody({ Key? key, this.task, required this.title }) : super(key: key);
 
   @override
   State<TaskBody> createState() => _TaskBodyState();
@@ -33,7 +37,7 @@ class _TaskBodyState extends State<TaskBody> {
               children: [
                 SizedBox(height: SizeConfig.screenHeight * 0.07),
                 Text(
-                  "Crear tarea",
+                  widget.title,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: getProportionateScreenWidth(28),
@@ -41,7 +45,7 @@ class _TaskBodyState extends State<TaskBody> {
                   ),
                 ),
                 SizedBox(height: SizeConfig.screenHeight * 0.1),
-                TaskForm(),
+                TaskForm(task: widget.task),
                 SizedBox(height: getProportionateScreenHeight(20)),
               ],
             ),

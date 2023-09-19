@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, unnecessary_new, avoid_print
 
 import 'package:application/features/domain/entities/task/task.entity.dart';
+import 'package:application/features/presentation/pages/task/task.screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../consts.dart';
@@ -28,11 +29,17 @@ class _cardsTaskState extends State<cardsTask> {
         // padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(5), vertical: getProportionateScreenHeight(5)),
         child: InkWell(
           onTap: () {
-            // Navigator.pushNamed(context, PageConst.RoutesPage);
+            //Navigator.pushNamed(context, PageConst.TaskPage);
+             Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TaskScreen(task: widget.task, title:  'EDITAR TAREA'),
+              ),
+            );
           },
           child: Container(
             decoration: BoxDecoration(
-              color: hexOrRGBToColor('#DE9307').withOpacity(.2),
+              color: hexOrRGBToColor(widget.task.status == 'PENDIENTE' ? '#DE9307' : widget.task.status == 'COMPLETADO' ? '#98CF68' : widget.task.status == 'EN PROGRESO' ? '#68CFAB' : '#CC183E' ).withOpacity(.2),
               borderRadius: BorderRadius.circular(10),
             ),
             padding: EdgeInsets.all(16), 

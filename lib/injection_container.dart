@@ -6,12 +6,14 @@ import 'package:application/features/data/repositories/user/user.repository.imp.
 import 'package:application/features/domain/repositories/task/task.repository.dom.dart';
 import 'package:application/features/domain/repositories/user/user.repository.dom.dart';
 import 'package:application/features/domain/usecases/task/commands/taskl.add.usecase.dart';
+import 'package:application/features/domain/usecases/task/commands/taskl.edit.usecase.dart';
 import 'package:application/features/domain/usecases/task/commands/taskl.list.usecase.dart';
 import 'package:application/features/domain/usecases/user/commands/getCurrentUid.usecase.dart';
 import 'package:application/features/domain/usecases/user/commands/isSignIn.usecase.dart';
 import 'package:application/features/domain/usecases/user/commands/user.signIn.usecase.dart';
 import 'package:application/features/domain/usecases/user/commands/user.signup.usecase.dart';
 import 'package:application/features/presentation/cubit/task/create/create_cubit.dart';
+import 'package:application/features/presentation/cubit/task/edit/edit_cubit.dart';
 import 'package:application/features/presentation/cubit/task/list/list_cubit.dart';
 import 'package:application/features/presentation/cubit/user/auth/auth_cubit.dart';
 import 'package:application/features/presentation/cubit/user/credentials/credentials_cubit.dart';
@@ -27,6 +29,7 @@ Future<void> init() async{
   sl.registerFactory(() => AuthCubit(isSignInUseCase: sl.call(), getCurrentUidUseCase: sl.call()));
   sl.registerFactory(() => TaskCreateCubit(taskAddUseCase: sl.call()));
   sl.registerFactory(() => TaskListCubit(taskListUseCase: sl.call()));
+  sl.registerFactory(() => TaskEditCubit(taskEditUseCase: sl.call()));
 
   
   // USE CASE
@@ -38,6 +41,7 @@ Future<void> init() async{
   //Task
   sl.registerLazySingleton(() => TaskAddUseCase(repository: sl.call()));
   sl.registerLazySingleton(() => TaskListUseCase(repository: sl.call()));
+  sl.registerLazySingleton(() => TaskEditUseCase(repository: sl.call()));
   
 
   // REPOSITORY
