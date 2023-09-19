@@ -1,3 +1,4 @@
+import 'package:application/features/presentation/cubit/task/create/create_cubit.dart';
 import 'package:application/features/presentation/cubit/user/auth/auth_cubit.dart';
 import 'package:application/features/presentation/cubit/user/credentials/credentials_cubit.dart';
 import 'package:application/features/presentation/pages/main/main_screen.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => di.sl<AuthCubit>()..appStarted(context)),
         BlocProvider(create: (_) => di.sl<CredentialsCubit>()),
+        BlocProvider(create: (_) => di.sl<TaskCreateCubit>()),
       ],
       child: MaterialApp(
       debugShowCheckedModeBanner: false,

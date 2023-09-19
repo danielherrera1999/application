@@ -42,7 +42,7 @@ class _SignInBodyState extends State<SignInBody> {
                   ),
                 ),
                 Text(
-                  "Inicie sesión con su correo electrónico y contraseña o continúe con google",
+                  "Inicie sesión con su correo electrónico y contraseña",
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: SizeConfig.screenHeight * 0.1),

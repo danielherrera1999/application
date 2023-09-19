@@ -40,6 +40,7 @@ class PageConst {
   static const String LoginPage = "signInScreen";
   static const String RegisterPage = "signUpScreen";
   static const String RoutesPage = "routesScreen";
+  static const String TaskPage = "TaskScreen";
 }
 
 class FirebaseConst {
