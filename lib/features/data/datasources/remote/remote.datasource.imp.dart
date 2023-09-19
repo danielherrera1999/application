@@ -6,6 +6,7 @@ import 'package:application/features/core/utils/auth.utils.dart';
 import 'package:application/features/core/utils/failure.dart';
 import 'package:application/features/data/datasources/remote/remote.datasource.dart';
 import 'package:application/features/domain/entities/task/request/task.request.entity.dart';
+import 'package:application/features/domain/entities/task/task.entity.dart';
 import 'package:application/features/domain/entities/user/authentication.entity.dart';
 import 'package:application/features/domain/entities/user/request/user.entity.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -155,6 +156,53 @@ class RemoteDatasourceImpl implements RemoteDataSource{
           success: responseData['success'],
         );
         return Result.ok(apiResponse);        
+      } else {
+        final responseData = jsonDecode(response.body);
+        final message = responseData['msg'];
+        final code = response.statusCode;
+        return Result.error(Failure(message,code));
+      }
+    } catch (e) {
+      return Result.error(Failure('Error en la solicitud: $e', 500));
+    }    
+  }
+
+  @override
+  Future<Result<ApiResponse<List<TaskEntity>>, Failure>> list() async {
+    try {
+      final token = await AuthUtils.getAccessToken();
+      final headers = <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': '$token',
+      };
+
+
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/services/task/list'),
+        headers: headers,
+      );
+      if (response.statusCode == 200) {
+          final responseData = jsonDecode(response.body);
+          final data = responseData['data'];
+          final List<TaskEntity> tasks = List<TaskEntity>.from(data.map((taskData) {
+          return TaskEntity(
+            id: taskData['id'].toString(),
+            title: taskData['title'],
+            description: taskData['description'],
+            expiration: taskData['expiration'],
+            status: taskData['status'],
+          );
+        }));
+        
+        final apiResponse = ApiResponse<List<TaskEntity>>(
+          data: tasks,
+          message: responseData['msg'],
+          code: responseData['code'],
+          success: responseData['success'],
+        );
+      
+      return Result.ok(apiResponse);      
       } else {
         final responseData = jsonDecode(response.body);
         final message = responseData['msg'];
