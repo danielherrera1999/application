@@ -9,4 +9,5 @@ abstract class TaskRepository {
   Future<Result<ApiResponse<bool>, Failure>> add(TaskRequestEntity params);
   Future<Result<ApiResponse<List<TaskEntity>>, Failure>> list();
   Future<Result<ApiResponse<bool>, Failure>> edit(TaskRequestEntity params);
+  Future<Result<ApiResponse<bool>, Failure>> delete(int params);
 }

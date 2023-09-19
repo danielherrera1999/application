@@ -204,7 +204,7 @@ class _TaskFormFormState extends State<TaskForm> {
     }
   }
 
-    Future<void> _edit() async {
+  Future<void> _edit() async {
     setState(() {
       task = TaskRequestEntity(
         id: widget.task!.id,

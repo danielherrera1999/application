@@ -1,4 +1,5 @@
 import 'package:application/features/presentation/cubit/task/create/create_cubit.dart';
+import 'package:application/features/presentation/cubit/task/delete/delete_cubit.dart';
 import 'package:application/features/presentation/cubit/task/list/list_cubit.dart';
 import 'package:application/features/presentation/cubit/user/auth/auth_cubit.dart';
 import 'package:application/features/presentation/cubit/user/credentials/credentials_cubit.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => di.sl<TaskCreateCubit>()),
         BlocProvider(create: (_) => di.sl<TaskListCubit>()),
         BlocProvider(create: (_) => di.sl<TaskEditCubit>()),
+        BlocProvider(create: (_) => di.sl<TaskDeleteCubit>()),
       ],
       child: MaterialApp(
       debugShowCheckedModeBanner: false,
