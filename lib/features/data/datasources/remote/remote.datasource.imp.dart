@@ -5,6 +5,7 @@ import 'package:application/features/core/utils/api_response.dart';
 import 'package:application/features/core/utils/auth.utils.dart';
 import 'package:application/features/core/utils/failure.dart';
 import 'package:application/features/data/datasources/remote/remote.datasource.dart';
+import 'package:application/features/domain/entities/task/request/task.request.entity.dart';
 import 'package:application/features/domain/entities/user/authentication.entity.dart';
 import 'package:application/features/domain/entities/user/request/user.entity.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -121,6 +122,48 @@ class RemoteDatasourceImpl implements RemoteDataSource{
   Future<void> signOut() {
     // TODO: implement signOut
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Result<ApiResponse<bool>, Failure>> add(TaskRequestEntity params) async {
+
+    try {
+      final token = await AuthUtils.getAccessToken();
+      final headers = <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': '$token',
+      };
+
+      final body = {
+        "title": params.title,
+        "description": params.description,
+        "expiration": params.expiration,
+        "status": params.status
+      };
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/services/task/add'),
+        headers: headers,
+        body: jsonEncode(body),
+      );
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        final apiResponse = ApiResponse<bool>(
+          data: responseData['data'],
+          message: responseData['msg'],
+          code: responseData['code'],
+          success: responseData['success'],
+        );
+        return Result.ok(apiResponse);        
+      } else {
+        final responseData = jsonDecode(response.body);
+        final message = responseData['msg'];
+        final code = response.statusCode;
+        return Result.error(Failure(message,code));
+      }
+    } catch (e) {
+      return Result.error(Failure('Error en la solicitud: $e', 500));
+    }    
   }
 
 }

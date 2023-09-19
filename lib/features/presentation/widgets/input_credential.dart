@@ -30,7 +30,7 @@ class InputCredential extends StatefulWidget {
     this.validator,
     this.onFieldSubmitted,
     this.inputType,
-    this.icons
+    this.icons,
     }) : super(key: key);
 
   @override

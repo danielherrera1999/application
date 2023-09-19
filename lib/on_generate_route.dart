@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors, body_might_complete_normally_nullable
 
 
+import 'package:application/features/presentation/pages/main/main_screen.dart';
 import 'package:application/features/presentation/pages/signIn/signin.screen.dart';
 import 'package:application/features/presentation/pages/signUp/signUp_screen.dart';
+import 'package:application/features/presentation/pages/task/task.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,9 +19,12 @@ class OnGenerateRoute {
       case PageConst.LoginPage: {
         return routeBuilder(SignInScreen());
       }
-      // case PageConst.HomePage: {
-      //   return routeBuilder(HomeScreen());
-      // }
+      case PageConst.TaskPage: {
+        return routeBuilder(TaskScreen());
+      }
+      case PageConst.HomePage: {
+        return routeBuilder(MainScreen(uid: ''));
+      }
       // case PageConst.ProfilePage: {
       //   if (args is UserEntity) {
       //     return routeBuilder(ProfileScreen(currentUser: args));
