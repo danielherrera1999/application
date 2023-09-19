@@ -19,7 +19,7 @@ import '../../../core/utils/result_response.dart';
 
 class RemoteDatasourceImpl implements RemoteDataSource{
 
-  final String baseUrl = 'http://192.168.1.30:8001/api';
+  final String baseUrl = 'http://x.x.x.x:8001/api';
 
   //SIGN UP OF API
   @override
