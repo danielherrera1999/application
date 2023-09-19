@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:application/consts.dart';
 import 'package:application/features/domain/entities/task/request/task.request.entity.dart';
+import 'package:application/features/presentation/pages/main/components/list_task.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,15 +44,22 @@ class _MainScreenState extends State<MainScreen> {
   });
 }
 
-
   @override
   Widget build(BuildContext context) {
-    return 
-      Scaffold(
-        body: Center(
-          child: Text('FUNCIONA'),
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Expanded(
+              child: ListTask(udi: widget.uid) 
+            )
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
+      ),
+      floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(context, PageConst.TaskPage, (route) => false);
           },
