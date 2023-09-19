@@ -1,4 +1,6 @@
 import 'package:application/consts.dart';
+import 'package:application/features/domain/entities/task/request/task.request.entity.dart';
+import 'package:application/features/domain/entities/task/task.entity.dart';
 import 'package:application/features/presentation/cubit/user/auth/auth_cubit.dart';
 import 'package:application/features/presentation/cubit/user/credentials/credentials_cubit.dart';
 import 'package:application/features/presentation/pages/main/main_screen.dart';
@@ -9,7 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TaskScreen extends StatefulWidget {
-  const TaskScreen({ Key? key }) : super(key: key);
+  final TaskEntity? task;
+  final String title;
+
+  const TaskScreen({ Key? key, this.task, required this.title }) : super(key: key);
 
   @override
   State<TaskScreen> createState() => _TaskScreenState();
@@ -24,12 +29,12 @@ class _TaskScreenState extends State<TaskScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pushNamedAndRemoveUntil(context, PageConst.HomePage, (route) => false);
           },
         ),
         title: const Text('Tareas'), 
       ),
-      body: const TaskBody()
+      body: TaskBody(task: widget.task, title: widget.title,)
     );
   }
 }

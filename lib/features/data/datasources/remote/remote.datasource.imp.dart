@@ -19,7 +19,7 @@ import '../../../core/utils/result_response.dart';
 
 class RemoteDatasourceImpl implements RemoteDataSource{
 
-  final String baseUrl = 'http://x.x.x.x:8001/api';
+  final String baseUrl = 'http://192.168.1.30:8001/api';
 
   //SIGN UP OF API
   @override
@@ -67,10 +67,11 @@ class RemoteDatasourceImpl implements RemoteDataSource{
       final response = await http.post(
         Uri.parse('$baseUrl/auth/signIn'),
         headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': 'application/json',
         },
         body: jsonEncode(body),
       );
+      print(response);
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         final data = responseData['data'];
@@ -203,6 +204,48 @@ class RemoteDatasourceImpl implements RemoteDataSource{
         );
       
       return Result.ok(apiResponse);      
+      } else {
+        final responseData = jsonDecode(response.body);
+        final message = responseData['msg'];
+        final code = response.statusCode;
+        return Result.error(Failure(message,code));
+      }
+    } catch (e) {
+      return Result.error(Failure('Error en la solicitud: $e', 500));
+    }    
+  }
+
+  @override
+  Future<Result<ApiResponse<bool>, Failure>> edit(TaskRequestEntity params) async {
+      try {
+      final token = await AuthUtils.getAccessToken();
+      final headers = <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': '$token',
+      };
+
+      final body = {
+        "id": int.parse(params.id!),
+        "title": params.title,
+        "description": params.description,
+        "expiration": params.expiration,
+        "status": params.status
+      };
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/services/task/edit'),
+        headers: headers,
+        body: jsonEncode(body),
+      );
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        final apiResponse = ApiResponse<bool>(
+          data: responseData['data'],
+          message: responseData['msg'],
+          code: responseData['code'],
+          success: responseData['success'],
+        );
+        return Result.ok(apiResponse);        
       } else {
         final responseData = jsonDecode(response.body);
         final message = responseData['msg'];

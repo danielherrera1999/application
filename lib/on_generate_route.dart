@@ -20,7 +20,7 @@ class OnGenerateRoute {
         return routeBuilder(SignInScreen());
       }
       case PageConst.TaskPage: {
-        return routeBuilder(TaskScreen());
+        return routeBuilder(TaskScreen(title: 'CREAR TAREA',));
       }
       case PageConst.HomePage: {
         return routeBuilder(MainScreen(uid: ''));
